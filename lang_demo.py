@@ -5,12 +5,16 @@ from dotenv import load_dotenv
 from langchain_core.output_parsers import StrOutputParser
 load_dotenv()
 
-prompt = ChatPromptTemplate.from_template("tell me a joke about {subject}")
+prompt = ChatPromptTemplate.from_template("{input}")
 llm = ChatOpenAI(model="gpt-4o")
 parser = StrOutputParser()
-#chain = prompt | llm
 chain = prompt | llm | parser
+
+while True:
+    value = input("you: ")
+    if value.lower() in ["exit", "quit"]:
+        break
+    chain = prompt | llm | parser
 #Runnable -> perform invoke only on runnable objects
-answer = chain.invoke({"subject":"software"})
-print(answer)
-#print(answer.content)
+    answer = chain.invoke({"input":value})
+    print("AI : "+answer)
